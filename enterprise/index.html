@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Techjockey Enterprise | IT Cost Calculators for CIOs & CFOs</title>
+<meta name="description" content="Free calculators for VMware renewal vs exit, AWS/GCP/Azure bill optimisation and laptop fleet TCO. Built for Indian enterprise IT leaders by Techjockey Enterprise.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brand:#F26522;       /* Techjockey orange - replace with official hex from brand guide */
+    --brand-dark:#D4520F;
+    --navy:#14213D;
+    --ink:#1F2937;
+    --muted:#6B7280;
+    --line:#E5E7EB;
+    --bg:#FFFFFF;
+    --soft:#F7F8FA;
+    --ok:#0F7B4A;
+    --warn:#B42318;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);font-size:15px;line-height:1.55}
+  a{color:var(--brand);text-decoration:none}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+
+  /* Header */
+  .topbar{background:var(--navy);color:#C9D1E0;font-size:13px}
+  .topbar .wrap{display:flex;justify-content:space-between;padding-top:7px;padding-bottom:7px;gap:12px;flex-wrap:wrap}
+  .topbar a{color:#fff}
+  header.nav{border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:10}
+  header.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{display:flex;align-items:baseline;gap:8px;font-weight:700;font-size:22px;color:var(--navy);letter-spacing:-.3px}
+  .logo b{color:var(--brand)}
+  .logo span.tag{font-size:11px;font-weight:600;color:#fff;background:var(--navy);padding:2px 7px;border-radius:3px;letter-spacing:.6px;text-transform:uppercase}
+  nav.links{display:flex;gap:26px;font-size:14px;font-weight:500}
+  nav.links a{color:var(--ink)}
+  nav.links a:hover{color:var(--brand)}
+  .btn{display:inline-block;border:0;cursor:pointer;font:inherit;font-weight:600;border-radius:4px;padding:11px 20px;font-size:14px}
+  .btn-primary{background:var(--brand);color:#fff}
+  .btn-primary:hover{background:var(--brand-dark)}
+  .btn-ghost{background:#fff;color:var(--navy);border:1px solid #CBD2DC}
+  .btn-ghost:hover{border-color:var(--navy)}
+
+  /* Hero */
+  .hero{background:var(--soft);border-bottom:1px solid var(--line)}
+  .hero .wrap{display:grid;grid-template-columns:1.25fr 1fr;gap:48px;padding-top:56px;padding-bottom:56px;align-items:center}
+  .eyebrow{font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--brand)}
+  h1{font-size:40px;line-height:1.15;margin:10px 0 16px;color:var(--navy);letter-spacing:-.6px}
+  .lead{font-size:17px;color:#4B5563;max-width:560px}
+  .hero-ctas{display:flex;gap:12px;margin-top:26px;flex-wrap:wrap}
+  .trust{margin-top:28px;font-size:13px;color:var(--muted)}
+  .trust strong{color:var(--ink)}
+  .stat-card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:22px}
+  .stat-card h3{margin:0 0 14px;font-size:14px;color:var(--muted);font-weight:600}
+  .stat-row{display:flex;justify-content:space-between;align-items:baseline;padding:12px 0;border-top:1px solid var(--line)}
+  .stat-row:first-of-type{border-top:0}
+  .stat-row .k{font-size:14px}
+  .stat-row .v{font-weight:700;font-size:20px;color:var(--navy)}
+  .src{font-size:11.5px;color:var(--muted);margin-top:10px}
+
+  /* Sections */
+  section{padding:64px 0}
+  h2{font-size:28px;color:var(--navy);margin:0 0 8px;letter-spacing:-.3px}
+  .sub{color:var(--muted);margin:0 0 28px;max-width:720px}
+
+  /* Calculators */
+  .tabs{display:flex;border-bottom:1px solid var(--line);gap:4px;overflow-x:auto}
+  .tab{background:none;border:0;border-bottom:3px solid transparent;padding:12px 18px;font:inherit;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+  .tab[aria-selected="true"]{color:var(--navy);border-bottom-color:var(--brand)}
+  .panel{display:none;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-top:0}
+  .panel.active{display:grid}
+  .inputs{padding:26px;border-right:1px solid var(--line)}
+  .results{padding:26px;background:var(--soft)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px}
+  label{display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:5px}
+  label small{color:var(--muted);font-weight:400}
+  input,select{width:100%;padding:9px 11px;border:1px solid #CBD2DC;border-radius:4px;font:inherit;font-size:14px;background:#fff;color:var(--ink)}
+  input:focus,select:focus{outline:2px solid rgba(242,101,34,.25);border-color:var(--brand)}
+  .group-title{font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:600;margin:22px 0 10px}
+  .group-title:first-child{margin-top:0}
+  .big{font-size:34px;font-weight:700;color:var(--navy);letter-spacing:-.5px;line-height:1.1}
+  .big.save{color:var(--ok)}
+  .big.up{color:var(--warn)}
+  .kpi-label{font-size:13px;color:var(--muted);margin-bottom:4px}
+  .kpis{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:4px;padding:14px}
+  .kpi .val{font-size:19px;font-weight:700;color:var(--navy)}
+  table.cmp{width:100%;border-collapse:collapse;font-size:14px;background:#fff;border:1px solid var(--line)}
+  table.cmp th,table.cmp td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:right}
+  table.cmp th:first-child,table.cmp td:first-child{text-align:left}
+  table.cmp th{font-size:12px;color:var(--muted);font-weight:600;background:#FAFBFC}
+  .bar{height:10px;background:#E8EBF0;border-radius:2px;overflow:hidden;margin-top:6px}
+  .bar > i{display:block;height:100%;background:var(--navy)}
+  .bar > i.b{background:var(--brand)}
+  .note{font-size:12.5px;color:var(--muted);margin-top:14px}
+  .gate{margin-top:20px;border-top:1px solid var(--line);padding-top:18px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .gate p{margin:0;font-size:13.5px;max-width:330px}
+
+  /* Circle */
+  .circle{background:var(--navy);color:#D6DCE8}
+  .circle h2{color:#fff}
+  .circle .wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+  .circle ul{padding:0;margin:20px 0 0;list-style:none}
+  .circle li{padding:12px 0;border-top:1px solid rgba(255,255,255,.12);display:flex;gap:12px}
+  .circle li b{color:#fff;display:block}
+  .num{color:var(--brand);font-weight:700;min-width:24px}
+  .form-card{background:#fff;color:var(--ink);border-radius:6px;padding:26px}
+  .form-card h3{margin:0 0 4px;color:var(--navy)}
+  .form-card .grid2{margin-top:16px}
+  .full{grid-column:1/-1}
+  .fine{font-size:12px;color:var(--muted);margin-top:10px}
+  .events{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .event{border:1px solid var(--line);border-radius:6px;padding:20px}
+  .event .when{font-size:12px;font-weight:600;color:var(--brand);text-transform:uppercase;letter-spacing:.8px}
+  .event h4{margin:6px 0 6px;color:var(--navy);font-size:17px}
+  .event p{margin:0;color:var(--muted);font-size:14px}
+  .method{font-size:13.5px;color:#4B5563}
+  .method li{margin-bottom:6px}
+  footer{background:#0E172B;color:#9AA4B8;font-size:13px;padding:28px 0}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+  /* Modal */
+  .modal{position:fixed;inset:0;background:rgba(14,23,43,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .modal.open{display:flex}
+  .modal .form-card{max-width:520px;width:100%;max-height:92vh;overflow:auto}
+  .close{float:right;background:none;border:0;font-size:22px;cursor:pointer;color:var(--muted)}
+  .thanks{display:none;padding:10px 0}
+
+  @media (max-width:900px){
+    .hero .wrap,.circle .wrap{grid-template-columns:1fr}
+    .panel.active{grid-template-columns:1fr}
+    .inputs{border-right:0;border-bottom:1px solid var(--line)}
+    nav.links{display:none}
+    .events{grid-template-columns:1fr}
+    h1{font-size:31px}
+  }
+  @media (max-width:520px){
+    .grid2,.kpis{grid-template-columns:1fr}
+    .wrap{padding:0 16px}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="wrap">
+  <span>Enterprise desk: Mon–Sat, 9:30am–7pm IST</span>
+  <span><a href="https://www.techjockey.com/">Back to techjockey.com</a></span>
+</div></div>
+
+<header class="nav"><div class="wrap">
+  <a class="logo" href="#"><span>tech<b>jockey</b></span><span class="tag">Enterprise</span></a>
+  <nav class="links">
+    <a href="#calculators">Calculators</a>
+    <a href="#circle">CXO Circle</a>
+    <a href="#events">Events</a>
+    <a href="#method">Methodology</a>
+  </nav>
+  <button class="btn btn-primary" data-open="expert">Talk to an expert</button>
+</div></header>
+
+<div class="hero"><div class="wrap">
+  <div>
+    <div class="eyebrow">For CIOs, CFOs and IT Directors</div>
+    <h1>Know what your infrastructure will cost before your next renewal.</h1>
+    <p class="lead">Free calculators for VMware renewal vs exit, cloud bill optimisation and laptop fleet TCO, priced in rupees for Indian enterprises. Get a detailed report and an independent review from Techjockey's enterprise team.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="#calculators">Run a calculator</a>
+      <button class="btn btn-ghost" data-open="circle">Request CXO Circle invite</button>
+    </div>
+    <p class="trust">Techjockey works with <strong>8,000+ businesses</strong> across India for software, cloud and hardware procurement.</p>
+  </div>
+  <div class="stat-card">
+    <h3>Why IT budgets are under pressure in 2026</h3>
+    <div class="stat-row"><span class="k">VMware Cloud Foundation list price</span><span class="v">$350/core/yr</span></div>
+    <div class="stat-row"><span class="k">Minimum cores billed per CPU</span><span class="v">16</span></div>
+    <div class="stat-row"><span class="k">Average public cloud spend wasted</span><span class="v">27–32%</span></div>
+    <div class="stat-row"><span class="k">Laptop purchase price as share of 5-yr TCO</span><span class="v">25–50%</span></div>
+    <div class="src">Sources: Broadcom list pricing as reported by licensing advisors; Flexera State of the Cloud 2025/26; industry TCO studies. See methodology.</div>
+  </div>
+</div></div>
+
+<section id="calculators"><div class="wrap">
+  <h2>Enterprise cost calculators</h2>
+  <p class="sub">Every assumption is editable. Results update as you type. Nothing is stored unless you request the detailed report.</p>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-tab="vm">VMware renewal vs exit</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="cloud">AWS / GCP / Azure bill optimiser</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="laptop">Laptop fleet TCO</button>
+  </div>
+
+  <!-- VMware -->
+  <div class="panel active" id="p-vm">
+    <div class="inputs">
+      <div class="group-title">Your environment</div>
+      <div class="grid2">
+        <div><label>ESXi hosts</label><input type="number" id="vm-hosts" value="12" min="1"></div>
+        <div><label>CPUs per host</label><input type="number" id="vm-cpus" value="2" min="1"></div>
+        <div><label>Cores per CPU</label><input type="number" id="vm-cores" value="24" min="1"></div>
+        <div><label>Virtual machines</label><input type="number" id="vm-vms" value="300" min="1"></div>
+        <div class="full"><label>Current annual VMware spend (₹) <small>support + subscription</small></label><input type="number" id="vm-current" value="4500000" min="0"></div>
+      </div>
+      <div class="group-title">Broadcom renewal quote</div>
+      <div class="grid2">
+        <div><label>Bundle</label>
+          <select id="vm-edition">
+            <option value="350">VMware Cloud Foundation (VCF)</option>
+            <option value="135">vSphere Foundation (VVF)</option>
+          </select></div>
+        <div><label>List price ($/core/yr)</label><input type="number" id="vm-list" value="350" min="0"></div>
+        <div><label>Expected discount (%)</label><input type="number" id="vm-disc" value="30" min="0" max="90"></div>
+        <div><label>USD → INR</label><input type="number" id="vm-fx" value="88" min="1"></div>
+      </div>
+      <div class="group-title">Exit option (Nutanix, Proxmox, Hyper-V, OpenShift etc.)</div>
+      <div class="grid2">
+        <div><label>Migration cost per VM (₹)</label><input type="number" id="vm-mig" value="12000" min="0"></div>
+        <div><label>Alt. platform cost <small>% of VMware quote</small></label><input type="number" id="vm-alt" value="45" min="0"></div>
+        <div><label>Retraining & parallel run (₹)</label><input type="number" id="vm-train" value="1500000" min="0"></div>
+        <div><label>Horizon (years)</label><select id="vm-years"><option>3</option><option>5</option></select></div>
+      </div>
+    </div>
+    <div class="results">
+      <div class="kpi-label">Estimated annual Broadcom renewal</div>
+      <div class="big up" id="vm-out-renew">–</div>
+      <div class="note" id="vm-out-delta"></div>
+      <div class="kpis">
+        <div class="kpi"><div class="kpi-label">Billable cores</div><div class="val" id="vm-out-cores">–</div></div>
+        <div class="kpi"><div class="kpi-label">Exit break-even</div><div class="val" id="vm-out-be">–</div></div>
+      </div>
+      <table class="cmp">
+        <thead><tr><th id="vm-h">3-year cost</th><th>Total</th><th>Per VM / yr</th></tr></thead>
+        <tbody>
+          <tr><td>Stay on VMware</td><td id="vm-t-stay">–</td><td id="vm-v-stay">–</td></tr>
+          <tr><td>Migrate off</td><td id="vm-t-exit">–</td><td id="vm-v-exit">–</td></tr>
+          <tr><td><b>Difference</b></td><td id="vm-t-diff"><b>–</b></td><td></td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:14px">
+        <div class="kpi-label">Stay</div><div class="bar"><i id="vm-bar-stay"></i></div>
+        <div class="kpi-label" style="margin-top:8px">Exit</div><div class="bar"><i class="b" id="vm-bar-exit"></i></div>
+      </div>
+      <div class="gate">
+        <p><b>Get the detailed report:</b> per-host licensing breakdown, negotiation benchmarks and a migration plan.</p>
+        <button class="btn btn-primary" data-open="report" data-calc="VMware renewal vs exit">Email me the report</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cloud -->
+  <div class="panel" id="p-cloud">
+    <div class="inputs">
+      <div class="group-title">Your cloud bill</div>
+      <div class="grid2">
+        <div><label>Provider</label><select id="c-prov"><option>AWS</option><option>Google Cloud</option><option>Microsoft Azure</option><option>Multi-cloud</option></select></div>
+        <div><label>Monthly bill (₹)</label><input type="number" id="c-bill" value="2500000" min="0"></div>
+        <div><label>Compute share of bill (%)</label><input type="number" id="c-compute" value="60" min="0" max="100"></div>
+        <div><label>Compute under commitments (%) <small>RIs / Savings Plans / CUDs</small></label><input type="number" id="c-commit" value="20" min="0" max="100"></div>
+        <div><label>Non-prod share of compute (%)</label><input type="number" id="c-nonprod" value="30" min="0" max="100"></div>
+        <div><label>Non-prod runs 24×7?</label><select id="c-247"><option value="1">Yes</option><option value="0">No, scheduled</option></select></div>
+        <div><label>Rightsizing done in last 6 months?</label><select id="c-right"><option value="0">No</option><option value="1">Yes</option></select></div>
+        <div><label>Storage/snapshot clean-up done?</label><select id="c-stor"><option value="0">No</option><option value="1">Yes</option></select></div>
+      </div>
+    </div>
+    <div class="results">
+      <div class="kpi-label">Estimated annual savings</div>
+      <div class="big save" id="c-out-save">–</div>
+      <div class="note" id="c-out-pct"></div>
+      <table class="cmp" style="margin-top:16px">
+        <thead><tr><th>Lever</th><th>Monthly</th><th>Annual</th></tr></thead>
+        <tbody id="c-rows"></tbody>
+      </table>
+      <div class="note">Recommended order: rightsize and schedule first, then commit. Committing on unoptimised usage locks in waste.</div>
+      <div class="gate">
+        <p><b>Free 30-minute bill review:</b> share a billing export and our cloud team returns a line-item savings plan.</p>
+        <button class="btn btn-primary" data-open="report" data-calc="Cloud bill optimiser">Book bill review</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Laptop -->
+  <div class="panel" id="p-laptop">
+    <div class="inputs">
+      <div class="group-title">Fleet</div>
+      <div class="grid2">
+        <div><label>Number of laptops</label><input type="number" id="l-n" value="500" min="1"></div>
+        <div><label>Price per laptop (₹)</label><input type="number" id="l-price" value="75000" min="0"></div>
+        <div><label>Refresh cycle (years)</label><select id="l-years"><option>3</option><option selected>4</option><option>5</option></select></div>
+        <div><label>Resale value at end (%)</label><input type="number" id="l-resale" value="10" min="0" max="100"></div>
+      </div>
+      <div class="group-title">Running costs per laptop per year</div>
+      <div class="grid2">
+        <div><label>IT support & repairs (₹)</label><input type="number" id="l-support" value="8000" min="0"></div>
+        <div><label>OS, security, MDM licences (₹)</label><input type="number" id="l-sw" value="6000" min="0"></div>
+        <div><label>Downtime hours per user</label><input type="number" id="l-down" value="8" min="0"></div>
+        <div><label>Employee cost per hour (₹)</label><input type="number" id="l-hour" value="700" min="0"></div>
+      </div>
+      <div class="group-title">Compare: rental / Device-as-a-Service</div>
+      <div class="grid2">
+        <div><label>Monthly rent per laptop (₹) <small>incl. support</small></label><input type="number" id="l-rent" value="2600" min="0"></div>
+        <div><label>Downtime reduction with DaaS (%)</label><input type="number" id="l-dred" value="40" min="0" max="100"></div>
+      </div>
+    </div>
+    <div class="results">
+      <div class="kpi-label">True cost per laptop over the cycle</div>
+      <div class="big" id="l-out-per">–</div>
+      <div class="note" id="l-out-share"></div>
+      <div class="kpis">
+        <div class="kpi"><div class="kpi-label">Fleet TCO (buy)</div><div class="val" id="l-out-fleet">–</div></div>
+        <div class="kpi"><div class="kpi-label">Fleet TCO (rent)</div><div class="val" id="l-out-rent">–</div></div>
+      </div>
+      <table class="cmp">
+        <thead><tr><th>Cost component (fleet)</th><th>Amount</th><th>Share</th></tr></thead>
+        <tbody id="l-rows"></tbody>
+      </table>
+      <div class="gate">
+        <p><b>Get a fleet quote:</b> compare Dell, HP, Lenovo and Apple business pricing plus rental options.</p>
+        <button class="btn btn-primary" data-open="report" data-calc="Laptop fleet TCO">Get fleet quote</button>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section id="circle" class="circle"><div class="wrap">
+  <div>
+    <div class="eyebrow">Invite only</div>
+    <h2>Techjockey CXO Circle</h2>
+    <p>A private, vendor-neutral community of technology and finance leaders from Indian enterprises. Peers share real prices, real contracts and real migration stories.</p>
+    <ul>
+      <li><span class="num">01</span><div><b>Quarterly price benchmarks</b>What companies like yours actually pay for VMware, cloud, M365, security and devices.</div></li>
+      <li><span class="num">02</span><div><b>Closed-door roundtables</b>12–15 leaders per city. Chatham House rules. No vendor pitches.</div></li>
+      <li><span class="num">03</span><div><b>Peer advisory</b>Ask a CIO who has already done the migration you are planning.</div></li>
+      <li><span class="num">04</span><div><b>Annual summit</b>Techjockey Enterprise Summit for members and invited guests.</div></li>
+    </ul>
+  </div>
+  <div class="form-card" id="circle-card">
+    <h3>Request an invitation</h3>
+    <p style="margin:0;color:var(--muted);font-size:14px">Membership is limited to CXO, VP and Director-level leaders. Every request is reviewed.</p>
+    <form data-form="circle">
+      <div class="grid2">
+        <div><label>Full name</label><input name="name" required></div>
+        <div><label>Work email</label><input name="email" type="email" required></div>
+        <div><label>Company</label><input name="company" required></div>
+        <div><label>Designation</label>
+          <select name="role" required>
+            <option value="">Select</option><option>CEO / Founder / MD</option><option>CIO / CTO</option><option>CFO</option><option>CISO</option><option>VP / Head of IT</option><option>Director</option><option>Other</option>
+          </select></div>
+        <div><label>Company size</label>
+          <select name="size" required><option value="">Select</option><option>200–1,000</option><option>1,000–5,000</option><option>5,000+</option><option>Under 200</option></select></div>
+        <div><label>City</label><select name="city"><option>Bengaluru</option><option>Mumbai</option><option>Delhi NCR</option><option>Hyderabad</option><option>Pune</option><option>Chennai</option><option>Other</option></select></div>
+        <div class="full"><label>LinkedIn profile <small>(optional)</small></label><input name="linkedin" type="url" placeholder="https://linkedin.com/in/..."></div>
+        <div class="full"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:400"><input type="checkbox" required style="width:auto;margin-top:3px"> I agree to Techjockey contacting me about the CXO Circle and enterprise offers, as per the privacy policy.</label></div>
+        <div class="full"><button class="btn btn-primary" style="width:100%">Join the waitlist</button></div>
+      </div>
+    </form>
+    <div class="thanks"><h3>Request received</h3><p>Our community team will review your profile and write to you within 3 working days.</p></div>
+  </div>
+</div></section>
+
+<section id="events"><div class="wrap">
+  <h2>Upcoming roundtables</h2>
+  <p class="sub">Closed-door, in-person sessions for members. Limited seats per city.</p>
+  <div class="events">
+    <div class="event"><div class="when">Bengaluru · Q1</div><h4>Life after Broadcom: VMware exit stories</h4><p>Three CIOs on what migration really cost and how long it took.</p></div>
+    <div class="event"><div class="when">Mumbai · Q1</div><h4>Cutting cloud bills 25% without slowing teams</h4><p>FinOps for BFSI under RBI cloud and data-localisation norms.</p></div>
+    <div class="event"><div class="when">Delhi NCR · Q2</div><h4>Device-as-a-Service vs buying laptops</h4><p>CFO and CIO perspectives on a 1,000+ device refresh.</p></div>
+  </div>
+  <p style="margin-top:22px"><button class="btn btn-ghost" data-open="circle">Request a seat</button></p>
+</div></section>
+
+<section id="method" style="background:var(--soft);border-top:1px solid var(--line)"><div class="wrap">
+  <h2>Methodology & assumptions</h2>
+  <ul class="method">
+    <li><b>VMware:</b> billable cores = hosts × CPUs × max(cores per CPU, 16). Broadcom sells per-core subscriptions with a 16-core minimum per CPU. Reported list prices: VCF ~$350/core/yr, VVF ~$135/core/yr. Negotiated deals commonly land 30–55% below list. Check your actual quote, since price lists and minimum-order rules vary by region and contract.</li>
+    <li><b>VMware exit:</b> one-time migration (per-VM services) plus retraining and parallel running, then the alternative platform's annual cost (set as % of the VMware quote). Break-even = one-time cost ÷ annual saving.</li>
+    <li><b>Cloud:</b> savings levers apply sequentially to avoid double counting: rightsizing (~15% of compute if not done), non-prod scheduling (~65% of non-prod hours saved), commitments on uncovered steady compute (~28% saving, typical 1-year Savings Plan/CUD range is 20–40%), storage clean-up (~10% of non-compute). Total capped at 45%. Flexera reports 27–32% of cloud spend is wasted on average.</li>
+    <li><b>Laptops:</b> TCO = purchase + support + software + downtime (hours × employee cost) − resale. Industry studies put purchase price at roughly 25–50% of lifecycle cost.</li>
+    <li>Estimates are indicative and not a quote. Prices in INR; USD conversion uses the rate you enter.</li>
+  </ul>
+</div></section>
+
+<footer><div class="wrap">
+  <span>© Techjockey Infotech Pvt. Ltd. · Techjockey Enterprise</span>
+  <span><a href="https://www.techjockey.com/privacy-policy" style="color:#C9D1E0">Privacy policy</a> · <a href="https://www.techjockey.com/terms-and-conditions" style="color:#C9D1E0">Terms</a></span>
+</div></footer>
+
+<!-- Lead modal -->
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="form-card">
+    <button class="close" aria-label="Close" data-close>&times;</button>
+    <h3 id="m-title">Get your detailed report</h3>
+    <p style="margin:0;color:var(--muted);font-size:14px" id="m-sub">We'll email the report to your work address. A Techjockey enterprise specialist may follow up to help you act on it.</p>
+    <form data-form="lead">
+      <input type="hidden" name="source" id="m-source">
+      <div class="grid2">
+        <div><label>Full name</label><input name="name" required></div>
+        <div><label>Work email</label><input name="email" type="email" required></div>
+        <div><label>Company</label><input name="company" required></div>
+        <div><label>Phone</label><input name="phone" type="tel" pattern="[0-9+\s-]{10,15}" required></div>
+        <div class="full"><label>Designation</label>
+          <select name="role" required>
+            <option value="">Select</option><option>CEO / Founder / MD</option><option>CIO / CTO</option><option>CFO</option><option>CISO</option><option>VP / Head of IT</option><option>Director</option><option>IT Manager</option><option>Other</option>
+          </select></div>
+        <div class="full"><label>When is your next renewal or purchase?</label>
+          <select name="timeline"><option>Within 3 months</option><option>3–6 months</option><option>6–12 months</option><option>Just researching</option></select></div>
+        <div class="full"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:400"><input type="checkbox" required style="width:auto;margin-top:3px"> I agree to be contacted by Techjockey as per the privacy policy.</label></div>
+        <div class="full"><button class="btn btn-primary" style="width:100%">Submit</button></div>
+      </div>
+    </form>
+    <div class="thanks"><h3>Thank you</h3><p>Your request is in. A Techjockey enterprise specialist will reach out within one working day.</p></div>
+  </div>
+</div>
+
+<script>
+/* ---------- Config: wire this to your CRM / lead API ---------- */
+const LEAD_ENDPOINT = ""; // e.g. "https://api.techjockey.com/enterprise/leads"
+
+const $ = id => document.getElementById(id);
+const num = id => parseFloat($(id).value) || 0;
+const inr = v => {
+  const a = Math.abs(v), s = v < 0 ? "−" : "";
+  if (a >= 1e7) return s + "₹" + (a/1e7).toFixed(2) + " Cr";
+  if (a >= 1e5) return s + "₹" + (a/1e5).toFixed(1) + " L";
+  return s + "₹" + Math.round(a).toLocaleString("en-IN");
+};
+
+/* Tabs */
+document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => {
+  document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", x === t));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === "p-" + t.dataset.tab));
+}));
+
+/* VMware */
+$("vm-edition").addEventListener("change", e => { $("vm-list").value = e.target.value; calcVM(); });
+function calcVM(){
+  const cores = num("vm-hosts") * num("vm-cpus") * Math.max(num("vm-cores"), 16);
+  const renew = cores * num("vm-list") * (1 - num("vm-disc")/100) * num("vm-fx");
+  const cur = num("vm-current"), yrs = +$("vm-years").value, vms = Math.max(num("vm-vms"),1);
+  const oneTime = num("vm-mig") * vms + num("vm-train");
+  const altYr = renew * num("vm-alt")/100;
+  const stay = renew * yrs, exit = oneTime + altYr * yrs;
+  const saving = renew - altYr;
+  $("vm-out-renew").textContent = inr(renew) + " / yr";
+  $("vm-out-delta").textContent = cur > 0
+    ? (renew >= cur ? "That is " + Math.round((renew/cur - 1)*100) + "% more than you pay today (" + inr(cur) + ")."
+                    : "That is " + Math.round((1 - renew/cur)*100) + "% less than you pay today (" + inr(cur) + ").")
+    : "";
+  $("vm-out-cores").textContent = cores.toLocaleString("en-IN");
+  $("vm-out-be").textContent = saving > 0 ? Math.ceil(oneTime / saving * 12) + " months" : "No break-even";
+  $("vm-h").textContent = yrs + "-year cost";
+  $("vm-t-stay").textContent = inr(stay);
+  $("vm-t-exit").textContent = inr(exit);
+  $("vm-v-stay").textContent = inr(stay / yrs / vms);
+  $("vm-v-exit").textContent = inr(exit / yrs / vms);
+  const d = stay - exit;
+  $("vm-t-diff").innerHTML = "<b style='color:" + (d >= 0 ? "var(--ok)" : "var(--warn)") + "'>" + (d >= 0 ? "Exit saves " : "Staying saves ") + inr(Math.abs(d)) + "</b>";
+  const mx = Math.max(stay, exit, 1);
+  $("vm-bar-stay").style.width = (stay/mx*100) + "%";
+  $("vm-bar-exit").style.width = (exit/mx*100) + "%";
+}
+
+/* Cloud */
+function calcCloud(){
+  const bill = num("c-bill"), comp = bill * num("c-compute")/100, nonComp = bill - comp;
+  let remaining = comp;
+  const rows = [];
+  if ($("c-right").value === "0"){ const s = remaining * 0.15; rows.push(["Rightsize over-provisioned instances", s]); remaining -= s; }
+  if ($("c-247").value === "1"){ const s = remaining * num("c-nonprod")/100 * 0.65; rows.push(["Schedule non-prod (nights/weekends off)", s]); remaining -= s; }
+  const uncovered = Math.max(0, 1 - num("c-commit")/100);
+  const steady = remaining * (1 - num("c-nonprod")/100) * uncovered;
+  rows.push(["Commit steady workloads (Savings Plans / CUDs)", steady * 0.28]);
+  if ($("c-stor").value === "0") rows.push(["Storage, snapshots & idle resources", nonComp * 0.10]);
+  let total = rows.reduce((a, r) => a + r[1], 0);
+  const cap = bill * 0.45; if (total > cap){ const f = cap/total; rows.forEach(r => r[1] *= f); total = cap; }
+  $("c-out-save").textContent = inr(total * 12) + " / yr";
+  $("c-out-pct").textContent = bill > 0 ? Math.round(total/bill*100) + "% of your " + $("c-prov").value + " bill. Likely range: " + inr(total*12*0.7) + " – " + inr(total*12) + "." : "";
+  $("c-rows").innerHTML = rows.map(r => "<tr><td>" + r[0] + "</td><td>" + inr(r[1]) + "</td><td>" + inr(r[1]*12) + "</td></tr>").join("");
+}
+
+/* Laptop */
+function calcLaptop(){
+  const n = Math.max(num("l-n"),1), p = num("l-price"), y = +$("l-years").value;
+  const purchase = p * n;
+  const support = num("l-support") * y * n;
+  const sw = num("l-sw") * y * n;
+  const down = num("l-down") * num("l-hour") * y * n;
+  const resale = purchase * num("l-resale")/100;
+  const total = purchase + support + sw + down - resale;
+  const rent = num("l-rent") * 12 * y * n + sw + down * (1 - num("l-dred")/100);
+  $("l-out-per").textContent = inr(total/n);
+  $("l-out-share").textContent = "Purchase price is only " + Math.round(purchase/total*100) + "% of the true cost over " + y + " years.";
+  $("l-out-fleet").textContent = inr(total);
+  $("l-out-rent").textContent = inr(rent);
+  const parts = [["Purchase", purchase],["IT support & repairs", support],["Software & security", sw],["Lost productivity (downtime)", down],["Resale credit", -resale]];
+  $("l-rows").innerHTML = parts.map(r => "<tr><td>" + r[0] + "</td><td>" + inr(r[1]) + "</td><td>" + Math.round(r[1]/total*100) + "%</td></tr>").join("")
+    + "<tr><td><b>Total</b></td><td><b>" + inr(total) + "</b></td><td>100%</td></tr>";
+}
+
+document.querySelectorAll("#p-vm input,#p-vm select").forEach(e => e.addEventListener("input", calcVM));
+document.querySelectorAll("#p-cloud input,#p-cloud select").forEach(e => e.addEventListener("input", calcCloud));
+document.querySelectorAll("#p-laptop input,#p-laptop select").forEach(e => e.addEventListener("input", calcLaptop));
+calcVM(); calcCloud(); calcLaptop();
+
+/* Modal + forms */
+const modal = $("modal");
+document.querySelectorAll("[data-open]").forEach(b => b.addEventListener("click", () => {
+  const kind = b.dataset.open;
+  if (kind === "circle"){ document.getElementById("circle").scrollIntoView({behavior:"smooth"}); return; }
+  $("m-title").textContent = kind === "expert" ? "Talk to an enterprise expert" : "Get your detailed report";
+  $("m-source").value = kind === "expert" ? "Talk to expert" : b.dataset.calc;
+  modal.querySelector("form").style.display = ""; modal.querySelector(".thanks").style.display = "none";
+  modal.classList.add("open");
+}));
+modal.addEventListener("click", e => { if (e.target === modal || e.target.hasAttribute("data-close")) modal.classList.remove("open"); });
+
+const FREE_MAIL = /@(gmail|yahoo|hotmail|outlook|rediffmail|icloud|proton)\./i;
+document.querySelectorAll("form[data-form]").forEach(f => f.addEventListener("submit", async e => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(f));
+  if (FREE_MAIL.test(data.email || "")) { alert("Please use your work email address."); return; }
+  data.form = f.dataset.form;
+  data.page = location.href;
+  data.calculator_snapshot = {
+    vmware_renewal: $("vm-out-renew").textContent,
+    cloud_savings: $("c-out-save").textContent,
+    laptop_tco: $("l-out-fleet").textContent
+  };
+  data.ts = new Date().toISOString();
+  try {
+    if (LEAD_ENDPOINT) await fetch(LEAD_ENDPOINT, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(data)});
+    else console.log("Lead captured (no endpoint configured):", data);
+  } catch (err) { console.error(err); }
+  f.style.display = "none";
+  f.parentElement.querySelector(".thanks").style.display = "block";
+}));
+</script>
+</body>
+</html>
